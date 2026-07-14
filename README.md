@@ -1,9 +1,9 @@
-⚡ ChargeTracker
+⚡ ChargeTracker:
 Non dimenticare mai più di mettere in carica i tuoi dispositivi.
 
 ChargeTracker è un'app desktop per Windows che tiene traccia delle ricariche di tutti i dispositivi elettronici di casa o dell'ufficio — smartphone, tablet, laptop, cuffie, smartwatch, droni, controller, spazzolini elettrici e molto altro — così non li ritrovi mai scarichi proprio quando ti servono.
 
-✨ Funzionalità
+✨ Funzionalità:
 Dashboard con riepilogo a colpo d'occhio: dispositivi scaduti, in scadenza, carichi
 Gestione dispositivi completa: categoria, posizione/stanza, tipo di caricatore, capacità batteria, data di acquisto e garanzia
 Categorie e posizioni personalizzabili: crea, rinomina ed elimina le tue etichette, non sei vincolato a un elenco fisso
@@ -18,7 +18,7 @@ Sincronizzazione multi-PC spostando il database in una cartella OneDrive/Dropbox
 Tema chiaro, scuro o automatico in base all'ora del giorno
 Tutto 100% locale: nessun account, nessuna connessione internet richiesta, i tuoi dati restano sul tuo PC
 
-🖥️ Screenshot
+🖥️ Screenshot:
 <img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/8e1026d8-a564-4b13-9727-2e7a8741be36" />
 <img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/34e8d0d1-31d1-493f-809e-894778768c16" />
 <img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/06792d05-2150-4320-8202-dcb26f18840a" />
@@ -26,7 +26,7 @@ Tutto 100% locale: nessun account, nessuna connessione internet richiesta, i tuo
 
 
 
-🚀 Come compilare
+🚀 Come compilare:
 Visual Studio 2022
 Installa Visual Studio 2022 (va bene anche la versione Community) con il workload ".NET Desktop Development"
 Apri `ChargeTrackerApp.sln`
@@ -42,12 +42,12 @@ Per un eseguibile singolo e autonomo (non richiede il runtime .NET installato su
 ```powershell
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 ```
-🛠️ Stack tecnologico
+🛠️ Stack tecnologico:
 WPF (.NET 8) — interfaccia desktop nativa Windows
 LiteDB — database locale embedded, nessun server richiesto
 QRCoder — generazione etichette QR
 System.Management — rilevamento dispositivi Bluetooth via WMI
-📁 Struttura del progetto
+📁 Struttura del progetto:
 ```
 ChargeTrackerApp/
   Models/        → Device, AppSettings, categorie predefinite
@@ -56,11 +56,11 @@ ChargeTrackerApp/
   Views/          → finestre secondarie (dispositivo, widget, calendario...)
   Themes/         → temi chiaro e scuro
 ```
-🗺️ Roadmap / idee future
+🗺️ Roadmap / idee future:
 [ ] Statistiche con grafici interattivi
 [ ] Notifiche push su smartphone tramite companion app
 [ ] Condivisione multi-utente/famiglia
 [ ] Localizzazione in altre lingue
 Contributi e segnalazioni sono benvenuti: apri pure una issue o una pull request.
-📄 Licenza
+📄 Licenza:
 Distribuito con licenza MIT — vedi il file `LICENSE` per i dettagli.
