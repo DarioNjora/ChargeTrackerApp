@@ -27,7 +27,7 @@ Tutto 100% locale: nessun account, nessuna connessione internet richiesta, i tuo
 
 
 
-🚀 Come compilare:
+🚀 Come compilare:  
 Installa Visual Studio 2022 (va bene anche la versione Community) con il workload ".NET Desktop Development".  
 Apri `ChargeTrackerApp.sln`.  
 Visual Studio scaricherà automaticamente i pacchetti NuGet necessari al primo build.  
