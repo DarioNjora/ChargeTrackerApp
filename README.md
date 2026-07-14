@@ -6,7 +6,6 @@ ChargeTracker è un'app desktop per Windows che tiene traccia delle ricariche di
 ✨ Funzionalità:
 
 Dashboard con riepilogo a colpo d'occhio: dispositivi scaduti, in scadenza, carichi.
-
 Gestione dispositivi completa: categoria, posizione/stanza, tipo di caricatore, capacità batteria, data di acquisto e garanzia.
 Categorie e posizioni personalizzabili: crea, rinomina ed elimina le tue etichette, non sei vincolato a un elenco fisso.
 Calendario mensile con le scadenze di ricarica di ogni dispositivo.
