@@ -20,11 +20,12 @@ Tema chiaro, scuro o automatico in base all'ora del giorno.
 Tutto 100% locale: nessun account, nessuna connessione internet richiesta, i tuoi dati restano sul tuo PC.  
 
 🖥️ Screenshot:
-<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/8e1026d8-a564-4b13-9727-2e7a8741be36" />
-<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/34e8d0d1-31d1-493f-809e-894778768c16" />
-<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/06792d05-2150-4320-8202-dcb26f18840a" />
-<img width="266" height="373" alt="image" src="https://github.com/user-attachments/assets/79d17885-bff1-46cc-a91b-65f397cae312" />
-
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/eaed35d2-fcb1-4c6f-86c7-76880f70ce55" />  
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/286db007-65db-4a57-bb5d-0b9aeb98b33a" />  
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/042e4719-42ac-4f79-9c8c-ea9c1cd9d75e" />  
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/e5c66aca-66d0-41e8-8aed-4679703298c7" />  
+<img width="386" height="473" alt="image" src="https://github.com/user-attachments/assets/9c6f6993-1d7a-4b2f-a8aa-5a45fc3e2947" />
+<img width="266" height="373" alt="image" src="https://github.com/user-attachments/assets/ac4b7fa1-c35b-4223-8ad4-84f9c28a527c" />  
 
 
 🚀 Come compilare:  
