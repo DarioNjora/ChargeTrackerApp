@@ -21,8 +21,28 @@ namespace ChargeTrackerApp.Views
         {
             InitializeComponent();
             Loaded += (s, e) => BuildCalendar();
-            DataContextChanged += (s, e) => BuildCalendar();
+            Unloaded += (s, e) => Unsubscribe(DataContext as MainViewModel);
+            DataContextChanged += (s, e) =>
+            {
+                Unsubscribe(e.OldValue as MainViewModel);
+                Subscribe(e.NewValue as MainViewModel);
+                BuildCalendar();
+            };
         }
+
+        private void Subscribe(MainViewModel? vm)
+        {
+            if (vm != null)
+                vm.DataChanged += ViewModel_DataChanged;
+        }
+
+        private void Unsubscribe(MainViewModel? vm)
+        {
+            if (vm != null)
+                vm.DataChanged -= ViewModel_DataChanged;
+        }
+
+        private void ViewModel_DataChanged(object? sender, EventArgs e) => BuildCalendar();
 
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {

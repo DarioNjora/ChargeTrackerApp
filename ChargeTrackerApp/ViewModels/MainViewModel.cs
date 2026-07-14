@@ -108,6 +108,13 @@ namespace ChargeTrackerApp.ViewModels
         public event EventHandler? OpenWidgetRequested;
         public event EventHandler? ThemeChangeApplied;
 
+        /// <summary>
+        /// Notificato ogni volta che i dati dei dispositivi cambiano (aggiunta, modifica,
+        /// eliminazione, segnato come caricato). Usato ad esempio dal calendario per
+        /// aggiornarsi subito senza dover cambiare mese.
+        /// </summary>
+        public event EventHandler? DataChanged;
+
         public MainViewModel(DataService dataService, NotificationService notificationService)
         {
             _dataService = dataService;
@@ -247,6 +254,8 @@ namespace ChargeTrackerApp.ViewModels
             OnPropertyChanged(nameof(AverageBatteryHealth));
             OnPropertyChanged(nameof(TotalAnnualEnergyCost));
             OnPropertyChanged(nameof(WarrantyExpiringSoon));
+
+            DataChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private static int StatusSortOrder(DeviceViewModel d) => d.Status switch
