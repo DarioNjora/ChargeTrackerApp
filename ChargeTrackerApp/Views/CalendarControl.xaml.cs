@@ -102,6 +102,7 @@ namespace ChargeTrackerApp.Views
         private Border BuildDayCell(DateTime date, List<DeviceViewModel>? devices)
         {
             bool isToday = date.Date == DateTime.Today;
+            bool hasDevices = devices != null && devices.Count > 0;
 
             var border = new Border
             {
@@ -111,8 +112,14 @@ namespace ChargeTrackerApp.Views
                 BorderBrush = isToday ? (Brush)Application.Current.Resources["AccentSolidBrush"] : Brushes.Transparent,
                 BorderThickness = new Thickness(isToday ? 2 : 0),
                 Padding = new Thickness(6),
-                MinHeight = 78
+                MinHeight = 78,
+                Cursor = hasDevices ? System.Windows.Input.Cursors.Hand : System.Windows.Input.Cursors.Arrow
             };
+
+            if (hasDevices)
+            {
+                border.MouseLeftButtonUp += (s, e) => OpenDayDetails(date);
+            }
 
             var stack = new StackPanel();
             stack.Children.Add(new TextBlock
@@ -151,6 +158,15 @@ namespace ChargeTrackerApp.Views
 
             border.Child = stack;
             return border;
+        }
+
+        private void OpenDayDetails(DateTime date)
+        {
+            if (DataContext is not MainViewModel vm) return;
+
+            var owner = Window.GetWindow(this);
+            var window = new CalendarDayWindow(vm, date) { Owner = owner };
+            window.ShowDialog();
         }
     }
 }
