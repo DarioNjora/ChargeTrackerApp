@@ -1,0 +1,75 @@
+<Window x:Class="ChargeTrackerApp.Views.AddEditDeviceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dispositivo" Height="700" Width="460" MinHeight="500" MinWidth="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="{StaticResource BackgroundBrush}"
+        WindowStyle="SingleBorderWindow">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Dettagli dispositivo" FontSize="20" FontWeight="Bold"
+                   Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,18"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,14,0">
+            <StackPanel Margin="0,0,4,0">
+
+                <TextBlock Text="Nome dispositivo" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="NameBox" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Categoria (scegli dall'elenco o scrivine una nuova)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <ComboBox x:Name="CategoryCombo" Margin="0,0,0,16" IsEditable="True" IsTextSearchEnabled="True"/>
+
+                <TextBlock Text="Ogni quanti giorni va ricaricato" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="IntervalBox" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Tipo di caricatore / cavo" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="ChargerBox" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Ultima ricarica" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker x:Name="LastChargedPicker" Grid.Column="0"/>
+                    <Button Grid.Column="1" Content="Adesso" Style="{StaticResource SecondaryButtonStyle}"
+                            Margin="8,0,0,0" Click="ChargedNow_Click"/>
+                </Grid>
+
+                <TextBlock Text="Posizione (es. camera, ufficio, zaino)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="LocationBox" Margin="0,0,0,16"/>
+
+                <CheckBox x:Name="PortableCheck" Content="Dispositivo portatile (esce spesso di casa)" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Capacità batteria in Wh (opzionale, per il costo energetico stimato)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="CapacityBox" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Data di acquisto (opzionale)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <DatePicker x:Name="PurchaseDatePicker" Margin="0,0,0,16" HorizontalAlignment="Left" Width="180"/>
+
+                <TextBlock Text="Durata garanzia in mesi (opzionale)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="WarrantyBox" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Note" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBox x:Name="NotesBox" Height="70" AcceptsReturn="True" TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto" Margin="0,0,0,16"/>
+
+                <Button x:Name="QrButton" Content="🔳 Genera etichetta QR" Style="{StaticResource SecondaryButtonStyle}"
+                        HorizontalAlignment="Left" Click="GenerateQr_Click"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Annulla" Style="{StaticResource SecondaryButtonStyle}" Width="100" Click="Cancel_Click"/>
+            <Button Content="Salva" Style="{StaticResource PrimaryButtonStyle}" Width="120" Margin="10,0,0,0" Click="Save_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

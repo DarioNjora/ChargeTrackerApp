@@ -1,0 +1,522 @@
+<Window x:Class="ChargeTrackerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:ChargeTrackerApp.Views"
+        xmlns:helpers="clr-namespace:ChargeTrackerApp.Helpers"
+        Title="Charge Tracker" Height="760" Width="1180" MinHeight="600" MinWidth="960"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Window.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <helpers:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+        <helpers:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter"/>
+        <helpers:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        <helpers:DateNullableToStringConverter x:Key="DateNullableToStringConverter"/>
+        <helpers:DateOnlyNullableToStringConverter x:Key="DateOnlyNullableToStringConverter"/>
+        <helpers:ThemeModeDisplayConverter x:Key="ThemeModeDisplayConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===================== SIDEBAR ===================== -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,26,0,30">
+                    <TextBlock Text="⚡" FontSize="26" Margin="0,0,8,0"/>
+                    <TextBlock Text="ChargeTracker" FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Top">
+                    <ToggleButton Style="{StaticResource NavButtonStyle}"
+                                  Command="{Binding NavigateCommand}" CommandParameter="Dashboard"
+                                  IsChecked="{Binding CurrentPage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Dashboard, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏠" FontSize="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Style="{StaticResource NavButtonStyle}"
+                                  Command="{Binding NavigateCommand}" CommandParameter="Devices"
+                                  IsChecked="{Binding CurrentPage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Devices, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔌" FontSize="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Dispositivi" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Style="{StaticResource NavButtonStyle}"
+                                  Command="{Binding NavigateCommand}" CommandParameter="Calendar"
+                                  IsChecked="{Binding CurrentPage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Calendar, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📅" FontSize="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Calendario" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Style="{StaticResource NavButtonStyle}"
+                                  Command="{Binding NavigateCommand}" CommandParameter="Statistiche"
+                                  IsChecked="{Binding CurrentPage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Statistiche, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📊" FontSize="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Statistiche" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Style="{StaticResource NavButtonStyle}"
+                                  Command="{Binding NavigateCommand}" CommandParameter="Impostazioni"
+                                  IsChecked="{Binding CurrentPage, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Impostazioni, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚙️" FontSize="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Impostazioni" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+                </StackPanel>
+
+                <Border DockPanel.Dock="Bottom" Margin="16,0,16,20" CornerRadius="12" Background="{StaticResource CardBackgroundBrush}" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="Da caricare" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock FontSize="24" FontWeight="Bold" Foreground="{StaticResource DangerBrush}">
+                            <Run Text="{Binding OverdueCount, Mode=OneWay}"/>
+                        </TextBlock>
+                        <TextBlock Text="dispositivi scaduti" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+
+                <Grid/>
+            </DockPanel>
+        </Border>
+
+        <!-- ===================== CONTENUTO ===================== -->
+        <Grid Grid.Column="1" Margin="32,26,32,26">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="Dashboard"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDevices}" Value="True">
+                                    <Setter Property="Text" Value="Dispositivi"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsCalendar}" Value="True">
+                                    <Setter Property="Text" Value="Calendario"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsStatistiche}" Value="True">
+                                    <Setter Property="Text" Value="Statistiche"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsImpostazioni}" Value="True">
+                                    <Setter Property="Text" Value="Impostazioni"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,12,0"
+                            Visibility="{Binding IsDevices, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ComboBox Width="160" Margin="0,0,6,0" VerticalAlignment="Center"
+                              ItemsSource="{Binding Locations}" SelectedItem="{Binding LocationFilter}"/>
+                    <Button Content="🗂" Style="{StaticResource IconButtonStyle}" Margin="0,0,6,0"
+                            ToolTip="Gestisci posizioni" Click="ManageLocations_Click"/>
+                    <Button Content="🏷" Style="{StaticResource IconButtonStyle}" Margin="0,0,10,0"
+                            ToolTip="Gestisci categorie" Click="ManageCategories_Click"/>
+                    <Grid Width="200" VerticalAlignment="Center">
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Cerca dispositivo..." Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="12,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
+                                   Visibility="{Binding SearchText, Converter={StaticResource StringEmptyToVisibilityConverter}}"/>
+                    </Grid>
+                </StackPanel>
+
+                <Button Grid.Column="2" Content="＋ Aggiungi dispositivo" Style="{StaticResource PrimaryButtonStyle}"
+                        Command="{Binding AddDeviceCommand}"
+                        Visibility="{Binding IsDevices, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+
+            <!-- ============ DASHBOARD ============ -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsDashboard, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <UniformGrid Columns="4" Margin="0,0,0,24">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="Dispositivi totali" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding TotalDevices}" FontSize="30" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="Scaduti" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding OverdueCount}" FontSize="30" FontWeight="Bold" Foreground="{StaticResource DangerBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="In scadenza" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding DueSoonCount}" FontSize="30" FontWeight="Bold" Foreground="{StaticResource WarningBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Carichi" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding OkCount}" FontSize="30" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <TextBlock Text="Dispositivi che richiedono attenzione" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+
+                    <ItemsControl ItemsSource="{Binding UrgentDevices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10" Padding="16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="26" Margin="0,0,16,0" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" FontSize="12" Margin="0,3,0,0"/>
+                                        </StackPanel>
+
+                                        <Ellipse Grid.Column="2" Width="12" Height="12" Fill="{Binding StatusColor}" Margin="0,0,16,0" VerticalAlignment="Center"/>
+
+                                        <Button Grid.Column="3" Content="Segna caricato" Style="{StaticResource PrimaryButtonStyle}"
+                                                Command="{Binding DataContext.MarkChargedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="Nessun dispositivo richiede attenzione al momento. Ottimo lavoro! 🎉"
+                               Foreground="{StaticResource TextSecondaryBrush}" Margin="0,10,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding UrgentDevices.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ============ DISPOSITIVI ============ -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsDevices, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ItemsControl ItemsSource="{Binding FilteredDevices}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource CardStyle}" Width="330" Margin="0,0,16,16">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="28" Margin="0,0,12,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="{Binding Category}"
+                                                       FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                        <Ellipse Grid.Column="2" Width="12" Height="12" Fill="{Binding StatusColor}" VerticalAlignment="Top"/>
+                                    </Grid>
+
+                                    <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" FontSize="13" Margin="0,12,0,0"/>
+                                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" Margin="0,4,0,0">
+                                        <Run Text="Ultima ricarica: "/>
+                                        <Run Text="{Binding LastCharged, Converter={StaticResource DateNullableToStringConverter}, Mode=OneWay}"/>
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" Margin="0,2,0,0">
+                                        <Run Text="🔋 Carica stimata: "/>
+                                        <Run Text="{Binding BatteryLevelPercent, Mode=OneWay}"/>
+                                        <Run Text="%"/>
+                                    </TextBlock>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                        <TextBlock FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,10,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Location}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="📍 {0}">
+                                                    <Binding Path="Location"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Text="🎒 Portatile" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsPortable}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <TextBlock FontSize="11" Foreground="{StaticResource SuccessBrush}" Margin="0,4,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsUnderWarranty}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        <Run Text="🛡 In garanzia fino al "/>
+                                        <Run Text="{Binding WarrantyEndDate, Converter={StaticResource DateOnlyNullableToStringConverter}, Mode=OneWay}"/>
+                                    </TextBlock>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                                        <Button Content="Caricato" Style="{StaticResource PrimaryButtonStyle}" Width="100"
+                                                Command="{Binding DataContext.MarkChargedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Content="✎" Style="{StaticResource IconButtonStyle}" Margin="8,0,0,0"
+                                                Command="{Binding DataContext.EditDeviceCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Style="{StaticResource DangerIconButtonStyle}" Margin="8,0,0,0"
+                                                FontFamily="Segoe MDL2 Assets" Content="&#xE74D;"
+                                                Command="{Binding DataContext.DeleteDeviceCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- ============ CALENDARIO ============ -->
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}"
+                    Visibility="{Binding IsCalendar, Converter={StaticResource BoolToVisibilityConverter}}">
+                <views:CalendarControl/>
+            </Border>
+
+            <!-- ============ STATISTICHE ============ -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsStatistiche, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <UniformGrid Columns="3" Margin="0,0,0,16">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="Ricariche totali registrate" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding TotalChargeEvents}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="Ricariche questo mese" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding ChargeEventsThisMonth}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Dispositivo più ricaricato" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock Text="{Binding MostChargedDeviceName}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <UniformGrid Columns="2" Margin="0,0,0,24">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="Salute media stimata delle batterie" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0">
+                                    <Run Text="{Binding AverageBatteryHealth, StringFormat={}{0:F0}, Mode=OneWay}"/>
+                                    <Run Text="%"/>
+                                </TextBlock>
+                                <TextBlock Text="Stima indicativa basata sui cicli di ricarica registrati (durata tipica: 500 cicli)."
+                                           Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Costo energetico stimato annuo" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                <TextBlock FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,6,0,0">
+                                    <Run Text="{Binding TotalAnnualEnergyCost, StringFormat={}{0:F2}, Mode=OneWay}"/>
+                                    <Run Text=" €"/>
+                                </TextBlock>
+                                <TextBlock Text="Calcolato sui dispositivi con capacità batteria (Wh) indicata nelle impostazioni del dispositivo."
+                                           Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <TextBlock Text="Garanzie in scadenza (prossimi 60 giorni)" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"
+                               Visibility="{Binding WarrantyExpiringSoon.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                    <ItemsControl ItemsSource="{Binding WarrantyExpiringSoon}" Margin="0,0,0,20">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,8" Padding="14">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="18" Margin="0,0,12,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Foreground="{StaticResource WarningBrush}" VerticalAlignment="Center">
+                                            <Run Text="Scade il "/>
+                                            <Run Text="{Binding WarrantyEndDate, Converter={StaticResource DateOnlyNullableToStringConverter}, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="Ricariche per dispositivo" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+
+                    <ItemsControl ItemsSource="{Binding Devices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,8" Padding="14">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="18" Margin="0,0,12,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center">
+                                            <Run Text="{Binding TotalCharges, Mode=OneWay}"/>
+                                            <Run Text=" ricariche"/>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ============ IMPOSTAZIONI ============ -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsImpostazioni, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Border Style="{StaticResource CardStyle}" MaxWidth="520" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock Text="Intervallo di ricarica predefinito (giorni)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Settings.DefaultIntervalDays, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+
+                        <TextBlock Text="Avvisa quando mancano X giorni alla scadenza" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Settings.NotifyDaysBefore, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+
+                        <TextBlock Text="Controlla promemoria ogni (minuti)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Settings.NotifyCheckIntervalMinutes, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+
+                        <CheckBox Content="Notifiche di promemoria attive" IsChecked="{Binding Settings.NotificationsEnabled}" Margin="0,0,0,14"/>
+                        <CheckBox Content="Riduci a icona nella system tray alla chiusura" IsChecked="{Binding Settings.MinimizeToTray}" Margin="0,0,0,14"/>
+                        <CheckBox Content="Avvia automaticamente con Windows" IsChecked="{Binding Settings.StartWithWindows}" Margin="0,0,0,20"/>
+
+                        <TextBlock Text="Tema" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="ThemeModeCombo" Width="240" HorizontalAlignment="Left" Margin="0,0,0,18"
+                                  SelectedItem="{Binding Settings.ThemeMode}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource ThemeModeDisplayConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="Costo energia elettrica (€ per kWh)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Settings.CostPerKwh, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+
+                        <CheckBox Content="Mostra il widget desktop all'avvio dell'app" IsChecked="{Binding Settings.ShowWidgetOnStartup}" Margin="0,0,0,14"/>
+                        <CheckBox Content="Chiedi sempre cosa fare quando chiudo la finestra" IsChecked="{Binding Settings.AskOnClose}" Margin="0,0,0,20"/>
+
+                        <Button Content="Salva impostazioni" Style="{StaticResource PrimaryButtonStyle}" Width="180" HorizontalAlignment="Left"
+                                Command="{Binding SaveSettingsCommand}" Margin="0,0,0,24"/>
+
+                        <Separator Margin="0,0,0,20" Background="{StaticResource BorderBrush}"/>
+
+                        <TextBlock Text="Widget desktop" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Una piccola finestra sempre in primo piano con i dispositivi da caricare, comoda da tenere sullo schermo."
+                                   Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                        <Button Content="Apri widget ora" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left"
+                                Command="{Binding OpenWidgetCommand}" Margin="0,0,0,24"/>
+
+                        <Separator Margin="0,0,0,20" Background="{StaticResource BorderBrush}"/>
+
+                        <TextBlock Text="Rilevamento dispositivi Bluetooth" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Cerca tra i dispositivi Bluetooth già associati a Windows (cuffie, mouse, speaker...) e importali velocemente."
+                                   Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                        <Button Content="Rileva dispositivi Bluetooth" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left"
+                                Click="DetectBluetooth_Click" Margin="0,0,0,24"/>
+
+                        <Separator Margin="0,0,0,20" Background="{StaticResource BorderBrush}"/>
+
+                        <TextBlock Text="Backup e ripristino" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Esporta tutti i tuoi dispositivi in un file JSON, oppure ripristina un backup precedente."
+                                   Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                            <Button Content="Esporta backup" Style="{StaticResource SecondaryButtonStyle}" Click="ExportBackup_Click"/>
+                            <Button Content="Importa backup" Style="{StaticResource SecondaryButtonStyle}" Margin="10,0,0,0" Click="ImportBackup_Click"/>
+                        </StackPanel>
+
+                        <Separator Margin="0,0,0,20" Background="{StaticResource BorderBrush}"/>
+
+                        <TextBlock Text="Cartella dati e sincronizzazione" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Sposta il database in una cartella sincronizzata (es. OneDrive o Dropbox) per condividere i dati tra più PC. L'app si riavvierà."
+                                   Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                        <Button Content="Cambia cartella dati" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left"
+                                Click="ChangeDataFolder_Click"/>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+
+        </Grid>
+    </Grid>
+</Window>

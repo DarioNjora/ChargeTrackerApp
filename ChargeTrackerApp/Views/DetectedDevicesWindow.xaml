@@ -1,0 +1,31 @@
+<Window x:Class="ChargeTrackerApp.Views.DetectedDevicesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dispositivi Bluetooth rilevati" Height="480" Width="420"
+        WindowStartupLocation="CenterOwner" Background="{StaticResource BackgroundBrush}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Dispositivi Bluetooth associati a Windows" FontSize="16" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}"/>
+            <TextBlock Text="Seleziona quelli che vuoi aggiungere a ChargeTracker. Potrai modificarne i dettagli in seguito."
+                       Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,6,0,0" FontSize="12"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="DevicesPanel"/>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Annulla" Style="{StaticResource SecondaryButtonStyle}" Width="100" Click="Cancel_Click"/>
+            <Button Content="Importa selezionati" Style="{StaticResource PrimaryButtonStyle}" Width="160" Margin="10,0,0,0" Click="Import_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
