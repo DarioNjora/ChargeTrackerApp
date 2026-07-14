@@ -22,8 +22,9 @@ namespace ChargeTrackerApp.Models
         // Se true, il dispositivo esce spesso di casa (utile per il promemoria "porta il caricatore")
         public bool IsPortable { get; set; } = false;
 
-        // Capacità batteria in Wh, usata per la stima del costo energetico
-        public double CapacityWh { get; set; } = 0;
+        // Capacità batteria in mAh (come indicato di solito sull'etichetta del dispositivo),
+        // usata per la stima del costo energetico
+        public double CapacityMah { get; set; } = 0;
 
         // Data di acquisto e durata della garanzia in mesi
         public DateTime? PurchaseDate { get; set; }

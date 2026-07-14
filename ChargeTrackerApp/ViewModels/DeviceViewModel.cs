@@ -68,10 +68,10 @@ namespace ChargeTrackerApp.ViewModels
             set { Model.IsPortable = value; OnPropertyChanged(nameof(IsPortable)); }
         }
 
-        public double CapacityWh
+        public double CapacityMah
         {
-            get => Model.CapacityWh;
-            set { Model.CapacityWh = value; OnPropertyChanged(nameof(CapacityWh)); }
+            get => Model.CapacityMah;
+            set { Model.CapacityMah = value; OnPropertyChanged(nameof(CapacityMah)); }
         }
 
         public DateTime? PurchaseDate
@@ -134,11 +134,20 @@ namespace ChargeTrackerApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Stima (indicativa) del costo energetico annuo. La capacità inserita è in mAh
+        /// (come sull'etichetta del dispositivo); si assume una ricarica a 5V, la tensione
+        /// standard USB, per convertirla in Wh: Wh = mAh × 5V / 1000.
+        /// Nota: dispositivi con ricarica rapida a tensioni più alte avranno un consumo
+        /// reale leggermente diverso, ma la stima resta un'indicazione di massima utile.
+        /// </summary>
         public double EstimatedAnnualCost(double costPerKwh)
         {
-            if (Model.CapacityWh <= 0 || Model.ChargeIntervalDays <= 0) return 0;
+            if (Model.CapacityMah <= 0 || Model.ChargeIntervalDays <= 0) return 0;
+            const double chargingVoltage = 5.0;
+            var wh = Model.CapacityMah * chargingVoltage / 1000.0;
             var chargesPerYear = 365.0 / Model.ChargeIntervalDays;
-            return (Model.CapacityWh / 1000.0) * chargesPerYear * costPerKwh;
+            return (wh / 1000.0) * chargesPerYear * costPerKwh;
         }
 
         public string Icon => CategoryDefaults.GetIcon(Model.Category);

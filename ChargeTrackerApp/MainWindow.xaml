@@ -385,7 +385,7 @@
                                     <Run Text="{Binding TotalAnnualEnergyCost, StringFormat={}{0:F2}, Mode=OneWay}"/>
                                     <Run Text=" €"/>
                                 </TextBlock>
-                                <TextBlock Text="Calcolato sui dispositivi con capacità batteria (Wh) indicata nelle impostazioni del dispositivo."
+                                <TextBlock Text="Calcolato sui dispositivi con capacità batteria (mAh) indicata, assumendo una ricarica a 5V (standard USB)."
                                            Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,6,0,0"/>
                             </StackPanel>
                         </Border>

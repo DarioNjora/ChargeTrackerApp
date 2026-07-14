@@ -29,7 +29,7 @@ namespace ChargeTrackerApp.Views
             NotesBox.Text = Device.Notes;
             LocationBox.Text = Device.Location;
             PortableCheck.IsChecked = Device.IsPortable;
-            CapacityBox.Text = Device.CapacityWh > 0 ? Device.CapacityWh.ToString(CultureInfo.InvariantCulture) : string.Empty;
+            CapacityBox.Text = Device.CapacityMah > 0 ? Device.CapacityMah.ToString(CultureInfo.InvariantCulture) : string.Empty;
             WarrantyBox.Text = Device.WarrantyMonths?.ToString() ?? string.Empty;
 
             if (Device.LastCharged.HasValue)
@@ -62,7 +62,7 @@ namespace ChargeTrackerApp.Views
             if (!string.IsNullOrWhiteSpace(CapacityBox.Text) &&
                 !double.TryParse(CapacityBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out capacity))
             {
-                MessageBox.Show("La capacità della batteria deve essere un numero (es. 15.5).",
+                MessageBox.Show("La capacità della batteria deve essere un numero in mAh (es. 3000).",
                     "Valore non valido", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -91,7 +91,7 @@ namespace ChargeTrackerApp.Views
             Device.LastCharged = LastChargedPicker.SelectedDate;
             Device.Location = LocationBox.Text.Trim();
             Device.IsPortable = PortableCheck.IsChecked == true;
-            Device.CapacityWh = capacity;
+            Device.CapacityMah = capacity;
             Device.PurchaseDate = PurchaseDatePicker.SelectedDate;
             Device.WarrantyMonths = warrantyMonths;
 

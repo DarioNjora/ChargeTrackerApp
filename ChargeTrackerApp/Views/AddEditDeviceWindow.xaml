@@ -48,7 +48,7 @@
 
                 <CheckBox x:Name="PortableCheck" Content="Dispositivo portatile (esce spesso di casa)" Margin="0,0,0,16"/>
 
-                <TextBlock Text="Capacità batteria in Wh (opzionale, per il costo energetico stimato)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                <TextBlock Text="Capacità batteria in mAh — es. 3000 (opzionale, per il costo energetico stimato)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
                 <TextBox x:Name="CapacityBox" Margin="0,0,0,16"/>
 
                 <TextBlock Text="Data di acquisto (opzionale)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
