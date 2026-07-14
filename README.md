@@ -20,6 +20,10 @@ Tutto 100% locale: nessun account, nessuna connessione internet richiesta, i tuo
 
 🖥️ Screenshot
 <img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/8e1026d8-a564-4b13-9727-2e7a8741be36" />
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/34e8d0d1-31d1-493f-809e-894778768c16" />
+<img width="1166" height="753" alt="image" src="https://github.com/user-attachments/assets/06792d05-2150-4320-8202-dcb26f18840a" />
+<img width="266" height="373" alt="image" src="https://github.com/user-attachments/assets/79d17885-bff1-46cc-a91b-65f397cae312" />
+
 
 
 🚀 Come compilare
